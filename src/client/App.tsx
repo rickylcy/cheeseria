@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 // Components
 import Item from './Cart/Item/Item';
 import Cart from './Cart/Cart';
+import ItemDialog from './Cart/Item/ItemDialog';
 import Drawer from '@material-ui/core/Drawer';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
@@ -28,6 +29,12 @@ const getCheeses = async (): Promise<CartItemType[]> =>
   await (await fetch(`api/cheeses`)).json();
 
 const App = () => {
+  // State for opening dialog component
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  // Item info for the pop up dialog
+  const [item, setItem] = React.useState({} as CartItemType)
+
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
   const { data, isLoading, error } = useQuery<CartItemType[]>(
@@ -68,6 +75,27 @@ const App = () => {
       }, [] as CartItemType[])
     );
   };
+
+  // Set dialog state
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const purchaseItems = async (): Promise<CartItemType[]> => 
+  { await fetch(`api/purchase`, {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(cartItems)
+  }).then((response) => {
+    console.log(response)
+    return response.json();
+  });};
 
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong ...</div>;
@@ -116,16 +144,22 @@ const App = () => {
           cartItems={cartItems}
           addToCart={handleAddToCart}
           removeFromCart={handleRemoveFromCart}
+          purchaseItems={purchaseItems}
         />
       </Drawer>
 
       <Grid container spacing={3}>
+        
         {data?.map(item => (
+          <>
           <Grid item key={item.id} xs={12} sm={4}>
-            <Item item={item} handleAddToCart={handleAddToCart} />
+            <Item item={item} setItem={setItem} handleOnClick={handleDialogOpen} handleAddToCart={handleAddToCart} />
           </Grid>
+          
+          </>
         ))}
       </Grid>
+      <ItemDialog item={item} dialogOpen={dialogOpen} handleDialogClose={handleDialogClose}/>
     </Wrapper>
 
   );
