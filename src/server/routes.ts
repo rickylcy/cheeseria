@@ -2,6 +2,7 @@ import * as express from 'express';
 const connection = require("./connect");
 const cheeses = require('./data/cheeses.json');
 var bodyParser = require('body-parser')
+require('dotenv').config();
 
 // create application/json parser
 var jsonParser = bodyParser.json()
@@ -13,15 +14,29 @@ router.get('/api/cheeses', (req, res, next) => {
     res.json(cheeses);
 });
 
-router.post('/api/purchase',jsonParser, async (req, res, next) => {
-    var data = req.body;
-    //var insert_query = `INSERT INTO purchase_history (items, total) VALUES (${}, ${})`;
-    /*var query = `SELECT * FROM purchase_history`;
-    await connection.query(`SELECT * FROM purchase_history`, (err, rows, fields) => {
+router.post('/api/purchase',jsonParser,  (req, res, next) => {
+    // Retreive data from client
+    const total = req.body.total;
+    const cartItems = req.body.cartItems;
+    
+    // String to store items list for the database
+    var itemsStr = "";
+    Object.keys(cartItems).forEach((key) => {
+        itemsStr = itemsStr + cartItems[key].amount + " " + cartItems[key].title + ", "
+    })
+    itemsStr = "'" + itemsStr + "'";
+
+    console.log("ITEMS: ", itemsStr);
+    console.log("TOTAL AMOUNT: ", total)
+
+    const query = `INSERT INTO purchase_history (items, total) VALUES (${itemsStr}, ${parseFloat(total)})`;
+    //const query = `select * from purchase_history`
+    connection.query(query, (err: any, results: any, fields: any) => {
         if (err) throw err
       
-        console.log('The solution is: ', rows[0].solution)
-      })*/
+        console.log('The solution is: ', results)
+        return results;
+      })
     res.json('POST request to the homepage')
 });
 
