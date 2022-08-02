@@ -18,11 +18,11 @@ router.post('/api/purchase',jsonParser,  (req, res, next) => {
     // Retreive data from client
     const total = req.body.total;
     const cartItems = req.body.cartItems;
-    
+
     // String to store items list for the database
     var itemsStr = "";
     Object.keys(cartItems).forEach((key) => {
-        itemsStr = itemsStr + cartItems[key].amount + " " + cartItems[key].title + ", "
+        itemsStr = itemsStr + cartItems[key].amount + " " + cartItems[key].title + ","
     })
     itemsStr = "'" + itemsStr + "'";
 
