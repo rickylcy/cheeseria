@@ -4,6 +4,8 @@ import { useQuery } from "react-query";
 import Item from "./Cart/Item/Item";
 import Cart from "./Cart/Cart";
 import ItemDialog from "./Cart/Item/ItemDialog";
+import RecentPurchaseDialog from "./RecentPurchaseDialog";
+
 import Drawer from "@material-ui/core/Drawer";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Grid from "@material-ui/core/Grid";
@@ -29,12 +31,18 @@ export type CartItemType = {
   amount: number;
 };
 
+// Fetch cheeses json data from server
 const getCheeses = async (): Promise<CartItemType[]> =>
   await (await fetch(`api/cheeses`)).json();
 
+// Fetch recent purchases json data from server
+const getRecentPurchases = async (): Promise<String> =>
+  await (await fetch(`api/recent`)).json();
+
 const App = () => {
   // State for opening dialog component
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [itemDialogOpen, setItemDialogOpen] = React.useState(false);
+  const [recentDialogOpen, setRecentDialogOpen] = React.useState(false);
 
   // Item info for the pop up dialog
   const [item, setItem] = React.useState({} as CartItemType);
@@ -44,11 +52,26 @@ const App = () => {
 
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
-  const { data, isLoading, error } = useQuery<CartItemType[]>(
-    "cheeses",
-    getCheeses
-  );
-  console.log(data);
+
+  // useQuery for fetching cheese data
+  const {
+    data: cheeseData,
+    isLoading: cheeseLoading,
+    error: cheeseError,
+  } = useQuery<CartItemType[]>("cheeses", getCheeses);
+  console.log(cheeseData);
+
+  // useQuery for fetching purchases history from database
+  // disabled it from automatically running
+  const {
+    data: recentPurchases,
+    isLoading: recentPurchasesLoading,
+    error: recentPurchasesError,
+    refetch: refetchRecentPurchases,
+  } = useQuery<String>("recent", getRecentPurchases, {
+    refetchOnWindowFocus: false,
+    enabled: false, // disable this query from automatically running
+  });
 
   const getTotalItems = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
@@ -85,12 +108,20 @@ const App = () => {
   };
 
   // Set dialog state
-  const handleDialogOpen = () => {
-    setDialogOpen(true);
+  const handleItemDialogOpen = () => {
+    setItemDialogOpen(true);
   };
 
-  const handleDialogClose = () => {
-    setDialogOpen(false);
+  const handleItemDialogClose = () => {
+    setItemDialogOpen(false);
+  };
+
+  const handleRecentDialogOpen = () => {
+    setRecentDialogOpen(true);
+  };
+
+  const handleRecentDialogClose = () => {
+    setRecentDialogOpen(false);
   };
 
   // POST method for purshase item
@@ -108,8 +139,9 @@ const App = () => {
     });
   };
 
-  if (isLoading) return <LinearProgress />;
-  if (error) return <div>Something went wrong ...</div>;
+  if (cheeseLoading || recentPurchasesLoading) return <LinearProgress />;
+  if (cheeseError || recentPurchasesError)
+    return <div>Something went wrong ...</div>;
 
   return (
     <Wrapper>
@@ -121,7 +153,12 @@ const App = () => {
             justify="space-between"
             alignItems="center"
           >
-            <StyledButton>
+            <StyledButton
+              onClick={async () => {
+                await refetchRecentPurchases();
+                handleRecentDialogOpen();
+              }}
+            >
               <RestoreIcon />
               <Typography variant="subtitle2">Recent Purchases</Typography>
             </StyledButton>
@@ -156,13 +193,13 @@ const App = () => {
       </Drawer>
 
       <Grid container spacing={3}>
-        {data?.map((item) => (
+        {cheeseData?.map((item) => (
           <>
             <Grid item key={item.id} xs={12} sm={4}>
               <Item
                 item={item}
                 setItem={setItem}
-                handleOnClick={handleDialogOpen}
+                handleOnClick={handleItemDialogOpen}
                 handleAddToCart={handleAddToCart}
               />
             </Grid>
@@ -171,8 +208,13 @@ const App = () => {
       </Grid>
       <ItemDialog
         item={item}
-        dialogOpen={dialogOpen}
-        handleDialogClose={handleDialogClose}
+        dialogOpen={itemDialogOpen}
+        handleDialogClose={handleItemDialogClose}
+      />
+      <RecentPurchaseDialog
+        recentPurchases={recentPurchases}
+        dialogOpen={recentDialogOpen}
+        handleDialogClose={handleRecentDialogClose}
       />
     </Wrapper>
   );

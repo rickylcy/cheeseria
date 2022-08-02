@@ -14,6 +14,17 @@ router.get('/api/cheeses', (req, res, next) => {
     res.json(cheeses);
 });
 
+router.get('/api/recent', (req, res, next) => {
+    const query = `SELECT * FROM cheeseriadb.cheeseria`;
+    connection.query(query, (err: any, results: any, fields: any) => {
+        if (err) throw err
+      
+        console.log('The solution is: ', results)
+        res.json(results);
+      })
+    
+});
+
 router.post('/api/purchase',jsonParser,  (req, res, next) => {
     // Retreive data from client
     const total = req.body.total;
@@ -29,7 +40,7 @@ router.post('/api/purchase',jsonParser,  (req, res, next) => {
     console.log("ITEMS: ", itemsStr);
     console.log("TOTAL AMOUNT: ", total)
 
-    const query = `INSERT INTO purchase_history (items, total) VALUES (${itemsStr}, ${parseFloat(total)})`;
+    const query = `INSERT INTO cheeseriadb.cheeseria (items, total) VALUES (${itemsStr}, ${parseFloat(total)})`;
     //const query = `select * from purchase_history`
     connection.query(query, (err: any, results: any, fields: any) => {
         if (err) throw err

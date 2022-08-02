@@ -22,22 +22,21 @@ const Cart: React.FC<Props> = ({
   setTotal,
 }) => {
   // State for opening dialog component
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [purchaseDialogOpen, setPurchaseDialogOpen] = React.useState(false);
 
-  // Set dialog state
-  const handleDialogOpen = () => {
-    setDialogOpen(true);
+  // Set dialog states
+  const handlePurchaseDialogOpen = () => {
+    setPurchaseDialogOpen(true);
   };
-
   const handleDialogClose = () => {
-    setDialogOpen(false);
+    setPurchaseDialogOpen(false);
   };
 
   const calculateTotal = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
-  //
-  const handleOnClick = (amount: number) => {
+  // Set total amount state from app component
+  const handlePurchaseOnClick = (amount: number) => {
     setTotal(amount);
   };
 
@@ -56,8 +55,10 @@ const Cart: React.FC<Props> = ({
       <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
       <Button
         onClick={() => {
-          handleOnClick(parseFloat(calculateTotal(cartItems).toFixed(2)));
-          handleDialogOpen();
+          handlePurchaseOnClick(
+            parseFloat(calculateTotal(cartItems).toFixed(2))
+          );
+          handlePurchaseDialogOpen();
         }}
       >
         Purchase
@@ -65,7 +66,7 @@ const Cart: React.FC<Props> = ({
       <PurchaseDialog
         cartItems={cartItems}
         purchaseItems={purchaseItems}
-        dialogOpen={dialogOpen}
+        purchaseDialogOpen={purchaseDialogOpen}
         handleDialogClose={handleDialogClose}
         total={parseFloat(calculateTotal(cartItems).toFixed(2))}
       />

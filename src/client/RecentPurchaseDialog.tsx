@@ -6,43 +6,40 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-// Types
-import { CartItemType } from "../App";
-import { toNamespacedPath } from "path";
-
 type Props = {
-  cartItems: CartItemType[];
-  purchaseItems: (cartItems: CartItemType[]) => void;
-  purchaseDialogOpen: boolean;
+  recentPurchases: undefined;
+  dialogOpen: boolean;
   handleDialogClose: () => void;
-  total: number;
 };
 
-const PurchaseDialog: React.FC<Props> = ({
-  cartItems,
-  purchaseItems,
-  purchaseDialogOpen,
-  handleDialogClose: handlePurchaseDialogClose,
-  total,
+const RecentPurchaseDialog: React.FC<Props> = ({
+  recentPurchases,
+  dialogOpen,
+  handleDialogClose,
 }) => (
-  <Dialog onClose={() => handlePurchaseDialogClose()} open={purchaseDialogOpen}>
-    <DialogTitle>Checkout</DialogTitle>
+  <Dialog onClose={() => handleDialogClose()} open={dialogOpen}>
+    <DialogTitle>Recent Purchases:</DialogTitle>
     <DialogContent>
       <DialogContentText id="alert-dialog-slide-description">
-        Do you want to checkout with the total amount of ${total}?
+        {recentPurchases?.map((purchase) => (
+          <>
+            id: {purchase.id}
+            items: {purchase.items}
+            total: {purchase.total}
+          </>
+        ))}
       </DialogContentText>
     </DialogContent>
     <DialogActions>
       <Button
         onClick={() => {
-          handlePurchaseDialogClose();
-          purchaseItems(cartItems);
+          handleDialogClose();
         }}
       >
-        Confirm
+        Close
       </Button>
     </DialogActions>
   </Dialog>
 );
 
-export default PurchaseDialog;
+export default RecentPurchaseDialog;
