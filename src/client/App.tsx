@@ -33,7 +33,10 @@ const App = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
   // Item info for the pop up dialog
-  const [item, setItem] = React.useState({} as CartItemType)
+  const [item, setItem] = React.useState({} as CartItemType);
+
+  // Total amount of the purchase
+  const [total, setTotal] = React.useState(0 as number);
 
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
@@ -85,13 +88,15 @@ const App = () => {
     setDialogOpen(false);
   };
 
-  const purchaseItems = async (): Promise<CartItemType[]> => 
+  // POST method for purshase item
+  // params: cartItems, total
+  const purchaseItems = async (): Promise<any> => 
   { await fetch(`api/purchase`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json'
     },
-    body: JSON.stringify(cartItems)
+    body: JSON.stringify({cartItems: cartItems, total: total})
   }).then((response) => {
     console.log(response)
     return response.json();
@@ -145,6 +150,7 @@ const App = () => {
           addToCart={handleAddToCart}
           removeFromCart={handleRemoveFromCart}
           purchaseItems={purchaseItems}
+          setTotal={setTotal}
         />
       </Drawer>
 
