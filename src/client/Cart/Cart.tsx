@@ -32,6 +32,7 @@ const Cart: React.FC<Props> = ({
     setPurchaseDialogOpen(false);
   };
 
+  // Calculate total amount of the cart
   const calculateTotal = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 

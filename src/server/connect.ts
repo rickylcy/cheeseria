@@ -9,8 +9,6 @@ const connection = mysql.createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE
 });
-cheeseriadb@
-@Aa12345
 */
 
 const connection = mysql.createConnection({

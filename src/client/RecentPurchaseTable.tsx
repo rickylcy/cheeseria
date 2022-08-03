@@ -8,6 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 
+// Column format
 interface Column {
   id: "id" | "items" | "total";
   label: string;
@@ -16,6 +17,7 @@ interface Column {
   format?: (value: number) => string;
 }
 
+// Column styles
 const columns: readonly Column[] = [
   { id: "id", label: "id", minWidth: 50 },
   { id: "items", label: "items", minWidth: 180 },
@@ -28,6 +30,7 @@ const columns: readonly Column[] = [
   },
 ];
 
+// Table fields
 interface Data {
   id: number;
   items: string;
@@ -58,6 +61,7 @@ const RecentPurchaseTable: React.FC<Props> = ({ recentPurchases }) => {
     setPage(0);
   };
 
+  // Format the data from db for table use
   const generateData = (recentPurchases: any) => {
     recentPurchases?.forEach((purchase: any) => {
       const data = createData(purchase.id, purchase.items, purchase.total);
@@ -65,6 +69,7 @@ const RecentPurchaseTable: React.FC<Props> = ({ recentPurchases }) => {
     });
   };
 
+  // Fetch purchase record from database
   React.useEffect(() => {
     generateData(recentPurchases);
   }, []);

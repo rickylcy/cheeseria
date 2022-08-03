@@ -12,6 +12,7 @@ import Grid from "@material-ui/core/Grid";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import RestoreIcon from "@material-ui/icons/Restore";
 import Badge from "@material-ui/core/Badge";
+
 // Styles
 import {
   Wrapper,
@@ -20,6 +21,7 @@ import {
   HeaderTypography,
 } from "./App.styles";
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
+
 // Types
 export type CartItemType = {
   id: number;
@@ -148,7 +150,7 @@ const App = () => {
           <Grid
             container
             direction="row"
-            justify="space-between"
+            justifyContent="space-between"
             alignItems="center"
           >
             <StyledButton
@@ -169,6 +171,7 @@ const App = () => {
               <Badge
                 badgeContent={getTotalItems(cartItems)}
                 color="error"
+                overlap="rectangular"
                 data-cy="badge-count"
               >
                 <AddShoppingCartIcon />
