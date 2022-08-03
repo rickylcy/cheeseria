@@ -37,9 +37,6 @@ router.post('/api/purchase',jsonParser,  (req, res, next) => {
     })
     itemsStr = "'" + itemsStr + "'";
 
-    console.log("ITEMS: ", itemsStr);
-    console.log("TOTAL AMOUNT: ", total)
-
     const query = `INSERT INTO cheeseriadb.cheeseria (items, total) VALUES (${itemsStr}, ${parseFloat(total)})`;
     //const query = `select * from purchase_history`
     connection.query(query, (err: any, results: any, fields: any) => {

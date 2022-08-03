@@ -5,9 +5,10 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import RecentPurchaseTable from "./RecentPurchaseTable";
 
 type Props = {
-  recentPurchases: undefined;
+  recentPurchases: any;
   dialogOpen: boolean;
   handleDialogClose: () => void;
 };
@@ -20,15 +21,7 @@ const RecentPurchaseDialog: React.FC<Props> = ({
   <Dialog onClose={() => handleDialogClose()} open={dialogOpen}>
     <DialogTitle>Recent Purchases:</DialogTitle>
     <DialogContent>
-      <DialogContentText id="alert-dialog-slide-description">
-        {recentPurchases?.map((purchase) => (
-          <>
-            id: {purchase.id}
-            items: {purchase.items}
-            total: {purchase.total}
-          </>
-        ))}
-      </DialogContentText>
+      <RecentPurchaseTable recentPurchases={recentPurchases} />
     </DialogContent>
     <DialogActions>
       <Button
