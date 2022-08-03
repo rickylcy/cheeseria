@@ -38,6 +38,7 @@ const PurchaseDialog: React.FC<Props> = ({
           handlePurchaseDialogClose();
           purchaseItems(cartItems);
         }}
+        data-cy="btn-confirmPurchase"
       >
         Confirm
       </Button>

@@ -60,6 +60,7 @@ const Cart: React.FC<Props> = ({
           );
           handlePurchaseDialogOpen();
         }}
+        data-cy="btn-purchase"
       >
         Purchase
       </Button>

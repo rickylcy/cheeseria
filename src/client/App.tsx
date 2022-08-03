@@ -59,7 +59,6 @@ const App = () => {
     isLoading: cheeseLoading,
     error: cheeseError,
   } = useQuery<CartItemType[]>("cheeses", getCheeses);
-  console.log(cheeseData);
 
   // useQuery for fetching purchases history from database
   // disabled it from automatically running
@@ -104,7 +103,6 @@ const App = () => {
         }
       }, [] as CartItemType[])
     );
-    console.log(total);
   };
 
   // Set dialog state
@@ -167,7 +165,7 @@ const App = () => {
               Welcome to Patient Zero's Cheeseria
             </HeaderTypography>
 
-            <StyledButton onClick={() => setCartOpen(true)}>
+            <StyledButton onClick={() => setCartOpen(true)} data-cy="btn-cart">
               <Badge
                 badgeContent={getTotalItems(cartItems)}
                 color="error"
