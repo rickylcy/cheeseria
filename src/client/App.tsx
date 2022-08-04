@@ -107,7 +107,7 @@ const App = () => {
     );
   };
 
-  // Set dialog state
+  // Set popup dialog for item cards' state
   const handleItemDialogOpen = () => {
     setItemDialogOpen(true);
   };
@@ -116,6 +116,7 @@ const App = () => {
     setItemDialogOpen(false);
   };
 
+  // Set popup dialog for recent purchases' state
   const handleRecentDialogOpen = () => {
     setRecentDialogOpen(true);
   };
@@ -132,6 +133,7 @@ const App = () => {
       headers: {
         "Content-type": "application/json",
       },
+      // sending cart items and total amount of the cart to server
       body: JSON.stringify({ cartItems: cartItems, total: total }),
     }).then((response) => {
       console.log(response);

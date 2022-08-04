@@ -14,6 +14,7 @@ router.get('/api/cheeses', (req, res, next) => {
     res.json(cheeses);
 });
 
+// GET method to get all the recent purchase from database
 router.get('/api/recent', (req, res, next) => {
     const query = `SELECT * FROM cheeseriadb.cheeseria`;
     connection.query(query, (err: any, results: any, fields: any) => {
@@ -22,9 +23,9 @@ router.get('/api/recent', (req, res, next) => {
         console.log('The solution is: ', results)
         res.json(results);
       })
-    
 });
 
+// POST method to send all the items purchased from client to the server
 router.post('/api/purchase',jsonParser,  (req, res, next) => {
     // Retreive data from client
     const total = req.body.total;

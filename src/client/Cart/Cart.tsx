@@ -24,7 +24,7 @@ const Cart: React.FC<Props> = ({
   // State for opening dialog component
   const [purchaseDialogOpen, setPurchaseDialogOpen] = React.useState(false);
 
-  // Set dialog states
+  // Set dialog for purchase comfirmation's states
   const handlePurchaseDialogOpen = () => {
     setPurchaseDialogOpen(true);
   };
