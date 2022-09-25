@@ -1,3 +1,7 @@
+---
+permalink: ./public/index.html
+---
+
 ## Important Scripts
 
 This project was tested with node v16.15.0 and npm v8.5.5.
