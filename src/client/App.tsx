@@ -166,7 +166,7 @@ const App = () => {
             </StyledButton>
 
             <HeaderTypography variant="h3" noWrap>
-              Welcome to Patient Zero's Cheeseria
+              Welcome to Cheeseria
             </HeaderTypography>
 
             <StyledButton onClick={() => setCartOpen(true)} data-cy="btn-cart">
